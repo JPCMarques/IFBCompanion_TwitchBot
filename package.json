@@ -1,0 +1,27 @@
+{
+  "name": "ifbcompanion_twitchbot",
+  "version": "1.0.0",
+  "description": "Twitch integration for IFBCompanion https://jpcmarques.github.io/IFBCompanion/",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JPCMarques/IFBCompanion_TwitchBot.git"
+  },
+  "keywords": [
+    "IFBCompanion",
+    "Twitch",
+    "Bot"
+  ],
+  "author": "JPCMarques",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JPCMarques/IFBCompanion_TwitchBot/issues"
+  },
+  "homepage": "https://github.com/JPCMarques/IFBCompanion_TwitchBot#readme",
+  "dependencies": {
+    "tmi.js": "^1.2.1"
+  }
+}
