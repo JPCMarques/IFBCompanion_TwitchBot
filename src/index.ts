@@ -1,5 +1,6 @@
 import * as tmi from 'tmi.js'
 import { FirebaseHandler } from './shared/firebaseHandler';
+import { ChatPluginManager } from './shared/chatPlugin';
 
 var options = {
     options: {
@@ -18,6 +19,7 @@ var options = {
 
 var firebaseHandler = new FirebaseHandler();
 firebaseHandler.init().then((dataStore) => {
+    let pluginManager = new ChatPluginManager(dataStore);
     options.channels = dataStore.channelList;
     var client = new tmi.client(options);
     client.connect();
@@ -42,6 +44,14 @@ firebaseHandler.init().then((dataStore) => {
                     firebaseHandler.leaveChannel(channel);
                 }
                 break;
+            case 'chat':
+                pluginManager.parseChat(channel, userState, message)
+                .then((message) => {
+                    client.say(channel, '@' + userState['display-name'] + ' ' + message);
+                })
+                break;
         }
+
+
     })
 })
