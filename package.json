@@ -2,9 +2,12 @@
   "name": "ifbcompanion_twitchbot",
   "version": "1.0.0",
   "description": "Twitch integration for IFBCompanion https://jpcmarques.github.io/IFBCompanion/",
-  "main": "index.js",
+  "main": "build/index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "clean": "rmdir build /s /q",
+    "compile": "npm-run-all clean tsc",
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,11 @@
   },
   "homepage": "https://github.com/JPCMarques/IFBCompanion_TwitchBot#readme",
   "dependencies": {
+    "firebase": "^4.9.1",
+    "prompt": "^1.0.0",
     "tmi.js": "^1.2.1"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.2"
   }
 }
