@@ -53,7 +53,7 @@ export class BossVote implements IChatPlugin{
                 if (!isChannelOwner){
                     return 'You are not a channelOwner and therefore can\'t stop a vote.';
                 }
-                return "Unknown error occurred, please try again.";
+                else return "Channel has no ongoing vote";
                 
             default:
                 if(hasOngoingVote) {

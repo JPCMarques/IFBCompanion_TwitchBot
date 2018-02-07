@@ -35,13 +35,18 @@ firebaseHandler.init().then((dataStore) => {
 
         switch(userState['message-type']){
             case 'whisper':
-                if(message.startsWith('!joinme')){
+                if(message.toLowerCase().startsWith('!joinme')){
                     client.join(channel);
                     firebaseHandler.joinChannel(channel);
+                    client.whisper(userState['username'], "Bot successfully joined your channel.")
                 }
-                else if (message.startsWith('!leaveme')){
+                else if (message.toLowerCase().startsWith('!leaveme')){
                     client.part(channel);
                     firebaseHandler.leaveChannel(channel);
+                    client.whisper(userState['username'], "Bot successfully left your channel.")
+                }
+                else {
+                    client.whisper(userState['username'], "Invalid command. Valid whisper commands:\n!joinme - joins your channel\n!leaveme - leaves your channel\n!help - who knows what this does??")
                 }
                 break;
             case 'chat':
