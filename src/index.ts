@@ -1,6 +1,6 @@
 import * as tmi from 'tmi.js'
 import { FirebaseHandler } from './shared/firebaseHandler';
-import { ChatPluginManager } from './shared/chatPlugin';
+import { ChatPluginManager, IPluginResponse } from './plugins/chatPlugin';
 
 var options = {
     options: {
@@ -51,8 +51,12 @@ firebaseHandler.init().then((dataStore) => {
                 break;
             case 'chat':
                 pluginManager.parseChat(channel, userState, message)
-                .then((message) => {
-                    client.say(channel, '@' + userState['display-name'] + ' ' + message);
+                .then((response: IPluginResponse) => {
+                    if(response.isReply){
+                        client.whisper(userState['username'], response.data);
+                    } else {
+                        client.say(channel, '@' + userState['display-name'] + ' ' + response.data);
+                    }
                 })
                 break;
         }

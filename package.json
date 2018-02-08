@@ -26,6 +26,7 @@
   "homepage": "https://github.com/JPCMarques/IFBCompanion_TwitchBot#readme",
   "dependencies": {
     "firebase": "^4.9.1",
+    "jsonfile": "^4.0.0",
     "prompt": "^1.0.0",
     "tmi.js": "^1.2.1"
   },

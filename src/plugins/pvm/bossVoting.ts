@@ -1,8 +1,9 @@
-import { IChatPlugin } from "../shared/chatPlugin";
-import { IDataStore } from "../shared/dataStore";
+import { IChatPlugin } from "../chatPlugin";
+import { IDataStore } from "../../shared/dataStore";
 
 export class BossVote implements IChatPlugin{
     trigger = '!bossVote';
+    isReply = false;
 
     ongoingVotes = new Map<string, IChannelVotes>();
 

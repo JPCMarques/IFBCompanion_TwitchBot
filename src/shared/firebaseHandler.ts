@@ -51,15 +51,34 @@ export class FirebaseHandler {
     }
 
     async loadData() : Promise<IDataStore> {
-        await this.firebase.database().ref('constants/pvm/monsterList').once('value')
+        await this.firebase.database().ref(FirebaseConstants.monsterListPath).once('value')
             .then((snapshot) => {
                 this.dataStore.monsterList = snapshot.val();
             }).catch((err) => {
                 return Promise.reject(err);
             });
-        await this.firebase.database().ref('constants/pvm/channelList').once('value')
+        await this.firebase.database().ref(FirebaseConstants.channelListPath).once('value')
             .then((snapshot) => {
                 this.dataStore.channelList = snapshot.val();
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+        this.dataStore.commands = {}
+        await this.firebase.database().ref(FirebaseConstants.commandListPath + '/whisper').once('value')
+            .then((snapshot) => {
+                this.dataStore.commands.whisperCommands = {};
+                for (const prop of Object.keys(snapshot.val())) {
+                    if(prop.startsWith('!')) this.dataStore.commands.whisperCommands[prop] = snapshot.val()[prop];
+                }
+            }).catch((err) => {
+                return Promise.reject(err);
+            });
+        await this.firebase.database().ref(FirebaseConstants.commandListPath + '/chat').once('value')
+            .then((snapshot) => {
+                this.dataStore.commands.chatCommands = {};
+                for (const prop of Object.keys(snapshot.val())) {
+                    if(prop.startsWith('!')) this.dataStore.commands.chatCommands[prop] = snapshot.val()[prop];
+                }
             }).catch((err) => {
                 return Promise.reject(err);
             });
@@ -68,13 +87,31 @@ export class FirebaseHandler {
 
     joinChannel(channelName: string) : void {
         this.dataStore.channelList.push(channelName);
-        this.firebase.database().ref('constants/pvm/channelList').set(this.dataStore.channelList);
+        this.firebase.database().ref(FirebaseConstants.channelListPath).set(this.dataStore.channelList);
     }
 
     leaveChannel(channelName: string): void {
         let index = this.dataStore.channelList.indexOf(channelName);
         if(index === -1) return;
         this.dataStore.channelList.splice(index, 1);
-        this.firebase.database().ref('constants/pvm/channelList').set(this.dataStore.channelList);
+        this.firebase.database().ref(FirebaseConstants.channelListPath).set(this.dataStore.channelList);
     }
+
+    updateData(data: IRemoteData<any>): void{
+        data.onBeforeUpdate();
+        this.firebase.database().ref(data.ref).set(data.data);
+    }
+}
+
+export interface IRemoteData<T> {
+    ref: string;
+    data: T;
+
+    onBeforeUpdate(): void;
+}
+
+export enum FirebaseConstants {
+    channelListPath = 'constants/pvm/channelList',
+    monsterListPath = 'constants/pvm/monsterList',
+    commandListPath = 'constants/textCommands'
 }
