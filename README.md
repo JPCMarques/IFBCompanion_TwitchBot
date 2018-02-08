@@ -14,8 +14,16 @@ The bot allows you to run a series of commands allowing you to go for IFB and in
 
 - `!bossVote start`
 
-    Starts a boss vote (only stream owner will be able to do this, mod support coming soon^T^M).
+    Starts a boss vote (only stream owner will be able to do this, mod support coming soon).
 
 - `!bossVote stop`
 
-    Wraps up a boss vote (only stream owner will be able to do this, mod support coming soon^T^M).
+    Wraps up a boss vote (only stream owner will be able to do this, mod support coming soon).
+
+- `!bossVote <bossName>`
+
+    Votes for a boss 
+
+- `!ifbcompanion`
+
+    Links to this page
