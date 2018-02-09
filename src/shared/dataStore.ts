@@ -85,5 +85,45 @@ export const MonsterList : IMonster[] = [
     {
         aliases: ['dagannoth kings', 'dks'],
         displayName: 'Dagannoth Kings'
+    },
+    {
+        aliases: ['vorago', 'rago', 'vit camp', 'rocky fat dude', 'crwys wand price manip', 'so fat its tectonic'],
+        displayName: 'Vorago'
+    },
+    {
+        aliases: ['gregorovic', 'greg', 'greggo', 'not joker', 'sliske'],
+        displayName: 'Gregorovic'
+    },
+    {
+        aliases: ['helwyr', 'hel', 'seren', 'gamebugio', 'manbeardeer', 'not a crystal shapeshifter'],
+        displayName: 'Helwyr'
+    },
+    {
+        aliases: ['twin furies', 'tf', 'furies', 'twins', 'hardest gwd2'],
+        displayName: 'Twin Furies'
+    },
+    {
+        aliases: ['vindicta', 'vin', 'zaros', 'vindiddy', 'vin daddy', 'vin not diesel'],
+        displayName: 'Vindicta'
+    },
+    {
+        aliases: ['telos', 'tiltos', 'tentacle monster', 'hentai boss'],
+        displayName: 'Telos, the Warden'
+    },
+    {
+        aliases: ['aod', 'angel of death', 'nexaod', 'nex: aod', 'nex: angel of death', 'angel of loot', 'nex: age of deeps'],
+        displayName: 'Nex: Angel of Death'
+    },
+    {
+        aliases: ['yakamaru', 'yaka', 'not bm', 'burst blister', 'beachy boi', 'water worm', 'yakamary'],
+        displayName: 'Yakamaru'
+    },
+    {
+        aliases: ['magister', 'tuska wrath boss', 's-crap farm'],
+        displayName: 'The Magister'
+    },
+    {
+        aliases: ['rise of the six', 'rots', 'dps memes'],
+        displayName: 'Rise of the Six'
     }
 ]
