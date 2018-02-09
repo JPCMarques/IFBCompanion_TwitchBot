@@ -22,8 +22,8 @@ The bot allows you to run a series of commands allowing you to go for IFB and in
 
 - `!bossVote <bossName>`
 
-    Votes for a boss 
+    Votes for a boss.
 
 - `!ifbcompanion`
 
-    Links to this page
+    Links to this page.
