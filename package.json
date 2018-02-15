@@ -7,7 +7,9 @@
     "test": "test",
     "clean": "rmdir build /s /q",
     "compile": "npm-run-all clean tsc",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "testRun": "npm-run-all compile run",
+    "run": "node ./build/index.js"
   },
   "repository": {
     "type": "git",

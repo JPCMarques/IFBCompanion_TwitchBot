@@ -24,6 +24,7 @@ export class CommandManager {
     }
 
     async parseMessage (channel: string, userState: Object, message: string) : Promise<ICommandResponse> {
+        message = message.toLowerCase();
         const messageTokens = message.trim().split(' ');
         const commandID = messageTokens[0];
 
