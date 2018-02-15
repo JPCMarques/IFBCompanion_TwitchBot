@@ -1,6 +1,7 @@
 import * as tmi from 'tmi.js'
 import { FirebaseHandler } from './shared/firebaseHandler';
-import { ChatPluginManager, IPluginResponse } from './plugins/chatPlugin';
+import { CommandManager } from './commands/commandManager';
+import { ICommandResponse } from './shared/dataStore';
 
 var options = {
     options: {
@@ -12,16 +13,16 @@ var options = {
     },
     identity: {
         username: 'IFBCompanion',
-        password: "oauth:vxflx8lxf825meh107s6qlhybc5eri"
+        password: "oauth:j3klg383s1s8qeyfai6qjbzt8rop9n"
     },
     channels: []
 }
 
-var firebaseHandler = new FirebaseHandler();
+const firebaseHandler = new FirebaseHandler();
 firebaseHandler.init().then((dataStore) => {
-    let pluginManager = new ChatPluginManager(dataStore);
+    const commandManager = new CommandManager();
     options.channels = dataStore.channelList;
-    var client = new tmi.client(options);
+    const client = new tmi.client(options);
     client.connect();
     
     client.on('message', (channel: string, userState: Object, message: string, self: boolean) => {
@@ -50,14 +51,13 @@ firebaseHandler.init().then((dataStore) => {
                 }
                 break;
             case 'chat':
-                pluginManager.parseChat(channel, userState, message)
-                .then((response: IPluginResponse) => {
-                    if(response.isReply){
-                        client.whisper(userState['username'], response.data);
-                    } else {
-                        client.say(channel, '@' + userState['display-name'] + ' ' + response.data);
-                    }
-                })
+                commandManager.parseMessage(channel, userState, message)
+                    .then((commandResponse: ICommandResponse) => {
+                        if (commandResponse.whisper) client.whisper(userState['username'], commandResponse.result);
+                        else client.say(channel, `@${userState['display-name']} ${commandResponse.result}`);
+                    }).catch((err) => {
+                        console.log(err);
+                    })
                 break;
         }
 

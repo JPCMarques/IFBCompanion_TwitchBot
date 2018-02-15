@@ -51,34 +51,9 @@ export class FirebaseHandler {
     }
 
     async loadData() : Promise<IDataStore> {
-        await this.firebase.database().ref(FirebaseConstants.monsterListPath).once('value')
-            .then((snapshot) => {
-                this.dataStore.monsterList = snapshot.val();
-            }).catch((err) => {
-                return Promise.reject(err);
-            });
         await this.firebase.database().ref(FirebaseConstants.channelListPath).once('value')
             .then((snapshot) => {
                 this.dataStore.channelList = snapshot.val();
-            }).catch((err) => {
-                return Promise.reject(err);
-            });
-        this.dataStore.commands = {}
-        await this.firebase.database().ref(FirebaseConstants.commandListPath + '/whisper').once('value')
-            .then((snapshot) => {
-                this.dataStore.commands.whisperCommands = {};
-                for (const prop of Object.keys(snapshot.val())) {
-                    if(prop.startsWith('!')) this.dataStore.commands.whisperCommands[prop] = snapshot.val()[prop];
-                }
-            }).catch((err) => {
-                return Promise.reject(err);
-            });
-        await this.firebase.database().ref(FirebaseConstants.commandListPath + '/chat').once('value')
-            .then((snapshot) => {
-                this.dataStore.commands.chatCommands = {};
-                for (const prop of Object.keys(snapshot.val())) {
-                    if(prop.startsWith('!')) this.dataStore.commands.chatCommands[prop] = snapshot.val()[prop];
-                }
             }).catch((err) => {
                 return Promise.reject(err);
             });

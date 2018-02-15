@@ -1,7 +1,5 @@
 export interface IDataStore {
-    monsterList?: IMonster[];
     channelList?: string[];
-    commandStore?: ICommand[];
 }
 
 export interface IAliasableEntity {
@@ -10,12 +8,39 @@ export interface IAliasableEntity {
 
 export interface ICommand extends IAliasableEntity {
     isWhisper: boolean;
+}
+
+export interface ISimpleCommand extends ICommand {
     data: string;
 }
+
+export interface ICustomCommand extends ICommand {
+    execute(channel : string, userState: Object, messasge: string): Promise<ICommandResponse>
+}
+
+export interface ICommandResponse {
+    whisper: boolean;
+    result: string;
+}
+
+export type CommandType = ICustomCommand | ISimpleCommand;
 
 export interface IMonster extends IAliasableEntity {
     displayName: string;
 }
+
+export const CommandList :  CommandType[] = [
+    {
+        aliases: ['!ifbcompanion' , '!ifbot', '!ifbot about', '!ifbcompanion about', '!ifbot a', '!ifbcompanion a'],
+        isWhisper: true,
+        data: 'Hey there! The information to be displayed is too big, so go to my project page for all the info you need: https://goo.gl/21Hojj'
+    },
+    {
+        aliases: ['!ifbcompanion commands', '!ifbot commands', '!ifbot c', '!ifbcompanion c', '!ifbcompanion help', '!ifbot help', '!ifbot h', '!ifbcompanion h',],
+        isWhisper: true,
+        data: 'Hey there! There are too many commands to display, you can see a quick overview here: https://goo.gl/6FePPE'
+    }
+]
 
 export const MonsterList : IMonster[] = [
     {
@@ -23,7 +48,7 @@ export const MonsterList : IMonster[] = [
         displayName: 'Kree\'arra'
     },
     {
-        aliases: ['araxxor', 'araxxi', 'rax', 'raxi', 'nope', 'spooder', 'notepaper target practice'],
+        aliases: ['araxxor', 'araxxi', 'rax', 'raxi', 'nope', 'spooder', 'newspaper target practice'],
         displayName: 'Araxxi'
     },
     {
