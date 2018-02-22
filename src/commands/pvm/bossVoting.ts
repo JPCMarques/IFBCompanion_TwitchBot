@@ -101,7 +101,7 @@ export class BossVote implements ICustomCommand {
                         }
                     }
                     return Promise.resolve({
-                        result: replaceMessageData(CommandMessages.BOSS_VOTE_MISSING_BOSS, message.toLowerCase()), 
+                        result: replaceMessageData(CommandMessages.MISSING_BOSS, message.toLowerCase()), 
                         whisper: true
                     });
                 }

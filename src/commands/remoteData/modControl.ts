@@ -12,13 +12,6 @@ export class ModControl implements ICustomCommand {
     constructor(private dataStore: IDataStore) {}
 
     async execute(channel: string, userState: Object, message: string): Promise<ICommandResponse> {
-        if (message.indexOf(' ') === -1){
-            console.log('This');
-            return Promise.resolve({
-                result: replaceMessageData(CommandMessages.COMMAND_NO_ARGS, CommandConstants.MOD_CONTROL_DISPLAY, CommandConstants.MOD_CONTROL_EXPECTED_ARGS),
-                whisper: true
-            })
-        }
         message = message.substring(message.indexOf(' ') + 1);
         if (isChannelOwner(channel, userState)) {
             const username = userState['username'];
@@ -40,6 +33,11 @@ export class ModControl implements ICustomCommand {
             RemoteReferenceHandler.SetData(remoteRef, this.dataStore.channelData[username].modsEnabled);
             return Promise.resolve({
                 result: replaceMessageData(CommandMessages.MOD_CONTROL_SUCCESS, (dataStatus ? 'enabled' : 'disabled')) ,
+                whisper: true
+            });
+        } else {
+            return Promise.resolve({
+                result: CommandConstants.MOD_CONTROL_NOT_OWNER,
                 whisper: true
             })
         }

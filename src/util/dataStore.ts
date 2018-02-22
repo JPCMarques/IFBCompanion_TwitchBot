@@ -20,6 +20,8 @@ export interface IAliasableEntity {
 
 export interface ICommand extends IAliasableEntity {
     isWhisper: boolean;
+    extraWhisperAliases?: string[];
+    extraChatAliases?: string[];
 }
 
 export interface ISimpleCommand extends ICommand {

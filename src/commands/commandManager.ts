@@ -1,11 +1,14 @@
 import { CommandType, IDataStore, CommandList, ISimpleCommand, ICustomCommand, ICommandResponse, WhisperCommandList } from "../util/dataStore";
 import { BossVote } from "./pvm/bossVoting";
 import { ModControl } from "./remoteData/modControl";
-import { isNullOrUndefined } from "util";
+import { isNullOrUndefined, isNull } from "util";
 import { replaceMessageData } from "../util/utils";
 import { CommandMessages } from "../util/staticData/commands";
 import { Join } from "./remoteData/join";
 import { Leave } from "./remoteData/leave";
+import { BanBoss } from "./pvm/banBoss";
+import { PreferBoss } from "./pvm/preferBoss";
+import { ResetBoss } from "./pvm/resetBoss";
 
 export class CommandManager {
     private commandDirectory: ICommandDirectory = {}
@@ -14,10 +17,12 @@ export class CommandManager {
     constructor (private dataStore: IDataStore) {
         this.buildSimpleCommands();
         this.buildWhisperSimpleCommands();
-        this.registerCommand(new BossVote(dataStore));
-        this.registerCommand(new ModControl(dataStore));
-        this.registerWhisperCommand(new Join(dataStore));
-        this.registerWhisperCommand(new Leave(dataStore));
+
+        this.registerCommands(new BossVote(dataStore));
+
+        this.registerWhisperCommands(new Join(dataStore), new Leave(dataStore));
+
+        this.registerSharedCommands(new BanBoss(dataStore), new PreferBoss(dataStore), new ResetBoss(dataStore), new ModControl(dataStore));
     }
     
     buildSimpleCommands () : void {
@@ -36,16 +41,35 @@ export class CommandManager {
         });
     }
 
-    registerCommand (command: CommandType): void {
-        command.aliases.forEach(alias => {
-            this.commandDirectory[alias] = command
+    registerCommands (...commands: CommandType[]): void {
+        commands.forEach(command => {
+            command.aliases.forEach(alias => {
+                this.commandDirectory[alias] = command
+            });
         });
     }
 
-    registerWhisperCommand (command: CommandType): void {
-        command.aliases.forEach(alias => {
-            this.whisperCommandDirectory[alias] = command;
-        })
+    registerWhisperCommands (...commands: CommandType[]): void {
+        commands.forEach(command => {
+            command.aliases.forEach(alias => {
+                this.whisperCommandDirectory[alias] = command;
+            });
+        });
+    }
+
+    registerSharedCommands(...commands: CommandType[]): void {
+        commands.forEach(command => {
+            command.aliases.forEach(alias => {
+                this.commandDirectory[alias] = command;
+                this.whisperCommandDirectory[alias] = command;
+            });
+            if(!isNullOrUndefined(command.extraWhisperAliases)) command.extraWhisperAliases.forEach(alias => {
+                this.whisperCommandDirectory[alias] = command;
+            });
+            if(!isNullOrUndefined(command.extraChatAliases)) command.extraChatAliases.forEach(alias => {
+                this.commandDirectory[alias] = command;
+            });
+        });
     }
 
     async parseMessage (channel: string, userState: Object, message: string) : Promise<ICommandResponse> {
