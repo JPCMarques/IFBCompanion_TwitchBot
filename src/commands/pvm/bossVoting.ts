@@ -1,5 +1,8 @@
 import { IDataStore, ICustomCommand, IMonster, MonsterList, ICommandResponse } from "../../util/dataStore";
 import { isChannelMod, isChannelOwner } from "../util";
+import { isUserAllowed } from "../../util/permissions";
+import { CommandConstants, CommandMessages } from "../../util/staticData/commands";
+import { replaceMessageData } from "../../util/utils";
 
 export class BossVote implements ICustomCommand {
     aliases = ['!bossvote', '!bvote', '!bv'];
@@ -9,29 +12,43 @@ export class BossVote implements ICustomCommand {
 
     ongoingVotes = new Map<string, IChannelVotes>();
 
-    execute(channel: string, userState: Object, message: string): Promise<ICommandResponse> {
+    async execute(channel: string, userState: Object, message: string): Promise<ICommandResponse> {
         message = message.substring(message.indexOf(' ') + 1);
-        const isAllowed = isChannelOwner(channel, userState) || isChannelMod(channel, userState, this.dataStore);
+        let isAllowed: boolean;
+
+        
+
         const hasOngoingVote = this.ongoingVotes.has(channel);
         const messageTokens = message.split(' ');
         switch(messageTokens[0]){
             case BossVoteCommands.START:
-                if (!hasOngoingVote && isAllowed){
+                await isUserAllowed(channel, userState, this.dataStore).catch ((err) => {
+                    return Promise.resolve({
+                        result: err,
+                        whisper: true
+                    });
+                })
+                if (!hasOngoingVote){
                     this.ongoingVotes.set(channel, {bossVotes: [], voters: []});
                     return Promise.resolve({
-                        result: 'Vote started successfully!',
+                        result: CommandConstants.BOSS_VOTE_START_SUCCESS,
                         whisper: this.isWhisper
                     });
                 }
-                else if (hasOngoingVote && isAllowed){
-                    return Promise.reject(`You already have an ongoing vote, and can't start a new one until you finish the old one - use '${this.aliases[0]} stop' to stop a vote.`)    
+                else{
+                    return Promise.resolve({
+                        result: CommandConstants.BOSS_VOTE_START_FAIL,
+                        whisper: true
+                    })
                 }
-                else if (!isAllowed){
-                    return Promise.reject('You are not a channel owner and therefore can\'t start a vote.');
-                }
-                break;
             case BossVoteCommands.STOP:
-                if (hasOngoingVote && isAllowed){
+                await isUserAllowed(channel, userState, this.dataStore).catch((err) => {
+                    return Promise.resolve({
+                        result: err,
+                        whisper: true
+                    });
+                })
+                if (hasOngoingVote){
                     let monsters = [...this.ongoingVotes.get(channel).bossVotes];
                     let voteCounter = new Map<IMonster, number>();
                     
@@ -53,22 +70,24 @@ export class BossVote implements ICustomCommand {
                     }
 
                     return Promise.resolve({
-                        result: 'Vote stopped successfully! The winner was: ' + highestVote.displayName + ` with ${highestVoteCount} votes.`,
+                        result: replaceMessageData(CommandMessages.BOSS_VOTE_STOP_SUCCESS, highestVote.displayName, highestVoteCount),
                         whisper: this.isWhisper
                     });
                 }
-                else if (!hasOngoingVote && isAllowed){
-                    return Promise.reject(`You already don't an ongoing vote - use '${this.aliases[0]} start' to start a new vote.`);    
+                else{
+                    return Promise.resolve({
+                        result: CommandConstants.BOSS_VOTE_STOP_FAIL,
+                        whisper: true
+                    });
                 }
-                if (!isAllowed){
-                    return Promise.reject('You are not a channel owner or mod and therefore can\'t stop a vote.');
-                }
-                else return Promise.reject("Channel has no ongoing vote");
                 
             default:
                 if(hasOngoingVote) {
-                    const voted = this.ongoingVotes.get(channel).voters.indexOf(userState['username']) !== -1;
-                    if (voted) return Promise.reject('User already voted.');
+                    const voterIndex = this.ongoingVotes.get(channel).voters.indexOf(userState['username']);
+                    if (voterIndex !== -1) return Promise.resolve({
+                        result: replaceMessageData(CommandMessages.BOSS_VOTE_DBLCAST, this.ongoingVotes.get(channel).bossVotes[voterIndex].displayName),
+                        whisper: true
+                    });
 
                     for (var i = 0; i < MonsterList.length; i++){
                         const bossToken = message.toLowerCase();
@@ -76,15 +95,21 @@ export class BossVote implements ICustomCommand {
                             this.ongoingVotes.get(channel).voters.push(userState['username']);
                             this.ongoingVotes.get(channel).bossVotes.push(MonsterList[i]);
                             return Promise.resolve({
-                                result: "Vote registered: " + MonsterList[i].displayName,
+                                result: replaceMessageData(CommandMessages.BOSS_VOTE_CAST, MonsterList[i].displayName),
                                 whisper: this.isWhisper
                             });
                         }
                     }
-                    return Promise.reject("Boss not found: " + message.toLowerCase());
+                    return Promise.resolve({
+                        result: replaceMessageData(CommandMessages.BOSS_VOTE_MISSING_BOSS, message.toLowerCase()), 
+                        whisper: true
+                    });
                 }
                 else {
-                    return Promise.reject("The channel does not have an open vote.");
+                    return Promise.resolve({
+                        result: CommandConstants.BOSS_VOTE_CLOSED,
+                        whisper: true
+                    });
                 }
                 
         }
