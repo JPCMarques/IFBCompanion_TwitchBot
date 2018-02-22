@@ -1,35 +1,37 @@
-import { IDataStore, ICustomCommand, IMonster, MonsterList, ICommandResponse } from "../../shared/dataStore";
+import { IDataStore, ICustomCommand, IMonster, MonsterList, ICommandResponse } from "../../util/dataStore";
+import { isChannelMod, isChannelOwner } from "../util";
 
-export class BossVote implements ICustomCommand{
+export class BossVote implements ICustomCommand {
     aliases = ['!bossvote', '!bvote', '!bv'];
     isWhisper = false;
+
+    constructor(private dataStore: IDataStore) {}
 
     ongoingVotes = new Map<string, IChannelVotes>();
 
     execute(channel: string, userState: Object, message: string): Promise<ICommandResponse> {
         message = message.substring(message.indexOf(' ') + 1);
-        const isChannelOwner = '#' + userState['username'] === channel;
+        const isAllowed = isChannelOwner(channel, userState) || isChannelMod(channel, userState, this.dataStore);
         const hasOngoingVote = this.ongoingVotes.has(channel);
         const messageTokens = message.split(' ');
         switch(messageTokens[0]){
             case BossVoteCommands.START:
-                console.log(hasOngoingVote + "\n" + isChannelOwner);
-                if (!hasOngoingVote && isChannelOwner){
+                if (!hasOngoingVote && isAllowed){
                     this.ongoingVotes.set(channel, {bossVotes: [], voters: []});
                     return Promise.resolve({
                         result: 'Vote started successfully!',
                         whisper: this.isWhisper
                     });
                 }
-                else if (hasOngoingVote && isChannelOwner){
+                else if (hasOngoingVote && isAllowed){
                     return Promise.reject(`You already have an ongoing vote, and can't start a new one until you finish the old one - use '${this.aliases[0]} stop' to stop a vote.`)    
                 }
-                else if (!isChannelOwner){
+                else if (!isAllowed){
                     return Promise.reject('You are not a channel owner and therefore can\'t start a vote.');
                 }
                 break;
             case BossVoteCommands.STOP:
-                if (hasOngoingVote && isChannelOwner){
+                if (hasOngoingVote && isAllowed){
                     let monsters = [...this.ongoingVotes.get(channel).bossVotes];
                     let voteCounter = new Map<IMonster, number>();
                     
@@ -55,11 +57,11 @@ export class BossVote implements ICustomCommand{
                         whisper: this.isWhisper
                     });
                 }
-                else if (!hasOngoingVote && isChannelOwner){
+                else if (!hasOngoingVote && isAllowed){
                     return Promise.reject(`You already don't an ongoing vote - use '${this.aliases[0]} start' to start a new vote.`);    
                 }
-                if (!isChannelOwner){
-                    return Promise.reject('You are not a channelOwner and therefore can\'t stop a vote.');
+                if (!isAllowed){
+                    return Promise.reject('You are not a channel owner or mod and therefore can\'t stop a vote.');
                 }
                 else return Promise.reject("Channel has no ongoing vote");
                 
@@ -88,9 +90,6 @@ export class BossVote implements ICustomCommand{
         }
     }
 
-    constructor() {
-
-    }
 }
 
 export enum BossVoteCommands {

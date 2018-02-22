@@ -1,7 +1,7 @@
 import * as tmi from 'tmi.js'
-import { FirebaseHandler } from './shared/firebaseHandler';
+import { FirebaseHandler } from './util/firebaseHandler';
 import { CommandManager } from './commands/commandManager';
-import { ICommandResponse } from './shared/dataStore';
+import { ICommandResponse } from './util/dataStore';
 
 var options = {
     options: {
@@ -20,7 +20,7 @@ var options = {
 
 const firebaseHandler = new FirebaseHandler();
 firebaseHandler.init().then((dataStore) => {
-    const commandManager = new CommandManager();
+    const commandManager = new CommandManager(dataStore);
     options.channels = dataStore.channelList;
     const client = new tmi.client(options);
     client.connect();
@@ -34,21 +34,16 @@ firebaseHandler.init().then((dataStore) => {
 
         if(self) return;
 
+        const username = userState['username'];
+
         switch(userState['message-type']){
             case 'whisper':
-                if(message.toLowerCase().startsWith('!joinme')){
-                    client.join(channel);
-                    firebaseHandler.joinChannel(channel);
-                    client.whisper(userState['username'], "Bot successfully joined your channel.")
-                }
-                else if (message.toLowerCase().startsWith('!leaveme')){
-                    client.part(channel);
-                    firebaseHandler.leaveChannel(channel);
-                    client.whisper(userState['username'], "Bot successfully left your channel.")
-                }
-                else {
-                    client.whisper(userState['username'], "Invalid command. Valid whisper commands:\n!joinme - joins your channel\n!leaveme - leaves your channel\n!help - who knows what this does??")
-                }
+                commandManager.parseWhisper(channel, userState, message)
+                    .then((commandResponse: ICommandResponse) => {
+                        client.whisper(username, commandResponse.result);
+                    }).catch(err => {
+                        console.log(err);
+                    });
                 break;
             case 'chat':
                 commandManager.parseMessage(channel, userState, message)
@@ -57,7 +52,7 @@ firebaseHandler.init().then((dataStore) => {
                         else client.say(channel, `@${userState['display-name']} ${commandResponse.result}`);
                     }).catch((err) => {
                         console.log(err);
-                    })
+                    });
                 break;
         }
 

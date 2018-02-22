@@ -30,9 +30,11 @@
     "firebase": "^4.9.1",
     "jsonfile": "^4.0.0",
     "prompt": "^1.0.0",
-    "tmi.js": "^1.2.1"
+    "tmi.js": "^1.2.1",
+    "util": "^0.10.3"
   },
   "devDependencies": {
+    "@types/node": "^9.4.6",
     "npm-run-all": "^4.1.2"
   }
 }

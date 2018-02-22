@@ -1,5 +1,17 @@
 export interface IDataStore {
     channelList?: string[];
+    channelData?: IChannelDataStore
+}
+
+export interface IChannelDataStore {
+    [index: string]: IChannelData;
+}
+
+export interface IChannelData {
+    modsEnabled: boolean;
+    banList: IMonster[];
+    normalList: IMonster[];
+    preferList: IMonster[];
 }
 
 export interface IAliasableEntity {
@@ -15,7 +27,7 @@ export interface ISimpleCommand extends ICommand {
 }
 
 export interface ICustomCommand extends ICommand {
-    execute(channel : string, userState: Object, messasge: string): Promise<ICommandResponse>
+    execute(channel : string, userState: Object, message: string): Promise<ICommandResponse>
 }
 
 export interface ICommandResponse {
