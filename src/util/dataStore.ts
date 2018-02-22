@@ -54,6 +54,19 @@ export const CommandList :  CommandType[] = [
     }
 ]
 
+export const WhisperCommandList: CommandType[] = [
+    {
+        aliases: ['!about', '!ifbcompanion', '!ifbot'],
+        isWhisper: true,
+        data: 'Hey there! The information to be displayed is too big, so go to my project page for all the info you need: https://goo.gl/21Hojj'
+    },
+    {
+        aliases: ['!commands', '!c','!help', '!h', ],
+        isWhisper: true,
+        data: 'Hey there! There are too many commands to display, you can see a quick overview here: https://goo.gl/6FePPE'
+    }
+]
+
 export const MonsterList : IMonster[] = [
     {
         aliases: ['kree\'arra', 'kree', 'arma', 'idiot bird'],

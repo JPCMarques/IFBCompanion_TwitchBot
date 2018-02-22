@@ -1,4 +1,4 @@
-import { CommandType, IDataStore, CommandList, ISimpleCommand, ICustomCommand, ICommandResponse } from "../util/dataStore";
+import { CommandType, IDataStore, CommandList, ISimpleCommand, ICustomCommand, ICommandResponse, WhisperCommandList } from "../util/dataStore";
 import { BossVote } from "./pvm/bossVoting";
 import { ModControl } from "./remoteData/modControl";
 import { isNullOrUndefined } from "util";
@@ -13,6 +13,7 @@ export class CommandManager {
 
     constructor (private dataStore: IDataStore) {
         this.buildSimpleCommands();
+        this.buildWhisperSimpleCommands();
         this.registerCommand(new BossVote(dataStore));
         this.registerCommand(new ModControl(dataStore));
         this.registerWhisperCommand(new Join(dataStore));
@@ -23,6 +24,14 @@ export class CommandManager {
         CommandList.forEach(command => {
             command.aliases.forEach(alias => {
                 this.commandDirectory[alias] = command;
+            });
+        });
+    }
+
+    buildWhisperSimpleCommands(): void {
+        WhisperCommandList.forEach(command => {
+            command.aliases.forEach(alias => {
+                this.whisperCommandDirectory[alias] = command;
             });
         });
     }
