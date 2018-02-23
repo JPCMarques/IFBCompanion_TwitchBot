@@ -9,6 +9,7 @@ import { Leave } from "./remoteData/leave";
 import { BanBoss } from "./pvm/banBoss";
 import { PreferBoss } from "./pvm/preferBoss";
 import { ResetBoss } from "./pvm/resetBoss";
+import { ResetAllBosses } from "./pvm/resetAllBosses";
 
 export class CommandManager {
     private commandDirectory: ICommandDirectory = {}
@@ -22,8 +23,12 @@ export class CommandManager {
 
         this.registerWhisperCommands(new Join(dataStore), new Leave(dataStore));
 
-        this.registerSharedCommands(new BanBoss(dataStore), new PreferBoss(dataStore), new ResetBoss(dataStore), new ModControl(dataStore));
-    }
+        this.registerSharedCommands(new BanBoss(dataStore), 
+                                    new PreferBoss(dataStore), 
+                                    new ResetBoss(dataStore), 
+                                    new ModControl(dataStore), 
+                                    new ResetAllBosses(dataStore));
+    } 
     
     buildSimpleCommands () : void {
         CommandList.forEach(command => {

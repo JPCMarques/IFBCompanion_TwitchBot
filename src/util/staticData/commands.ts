@@ -95,4 +95,6 @@ export enum CommandConstants {
     BAN_BOSS_DISPLAY = 'Ban Boss',
     PREF_BOSS_DISPLAY = 'Prefer Boss',
     RESET_BOSS_DISPLAY = 'Reset Boss',
+
+    RESET_ALL_SUCCESS = 'Boss lists reset to initial state (none preferred or banned).',
 }
