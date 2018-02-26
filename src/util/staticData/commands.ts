@@ -26,6 +26,11 @@ export class CommandMessages {
         message: 'Vote stopped successfully! The winner was $0 with $1 votes.'
     };
 
+    static readonly BOSS_VOTE_BANNED_BOSS: IGenericMessage = {
+        expectedArguments: 1,
+        message: '$0 is banned. Please try again.'
+    }
+
     static readonly BOSS_VOTE_CAST: IGenericMessage = {
         expectedArguments: 1,
         message: 'Vote cast on $0.'

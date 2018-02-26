@@ -23,10 +23,10 @@ export class CommandManager {
 
         this.registerWhisperCommands(new Join(dataStore), new Leave(dataStore));
 
-        this.registerSharedCommands(new BanBoss(dataStore), 
-                                    new PreferBoss(dataStore), 
-                                    new ResetBoss(dataStore), 
-                                    new ModControl(dataStore), 
+        this.registerSharedCommands(new BanBoss(dataStore),
+                                    new PreferBoss(dataStore),
+                                    new ResetBoss(dataStore),
+                                    new ModControl(dataStore),
                                     new ResetAllBosses(dataStore));
     } 
     

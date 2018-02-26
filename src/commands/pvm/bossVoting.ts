@@ -88,18 +88,34 @@ export class BossVote implements ICustomCommand {
                         result: replaceMessageData(CommandMessages.BOSS_VOTE_DBLCAST, this.ongoingVotes.get(channel).bossVotes[voterIndex].displayName),
                         whisper: true
                     });
+                    const channelOwner = channel.replace('#', '');
+                    const channelData = this.dataStore.channelData[channelOwner];
+                    const bossToken = message.toLowerCase();
+                        
+                    for (var i = 0; i < channelData.normalList.length; i++){
+                        if (channelData.normalList[i].aliases.indexOf(bossToken) !== -1){
+                            const monster = channelData.normalList[i];
+                            return this.vote(channel, userState, monster, monster.displayName, 1);
+                        }
+                    }
 
-                    for (var i = 0; i < MonsterList.length; i++){
-                        const bossToken = message.toLowerCase();
-                        if (MonsterList[i].aliases.indexOf(bossToken) !== -1) {
-                            this.ongoingVotes.get(channel).voters.push(userState['username']);
-                            this.ongoingVotes.get(channel).bossVotes.push(MonsterList[i]);
+                    for (var i = 0; i < channelData.preferList.length; i++){
+                        if (channelData.preferList[i].aliases.indexOf(bossToken) !== -1){
+                            const monster = channelData.preferList[i];
+                            return this.vote(channel, userState, monster, monster.displayName, 2);
+                        }
+                    }
+
+                    for (var i = 0; i < channelData.banList.length; i++){
+                        if (channelData.banList[i].aliases.indexOf(bossToken) !== -1){
+                            const monster = channelData.banList[i];
                             return Promise.resolve({
-                                result: replaceMessageData(CommandMessages.BOSS_VOTE_CAST, MonsterList[i].displayName),
+                                result: replaceMessageData(CommandMessages.BOSS_VOTE_BANNED_BOSS, monster.displayName),
                                 whisper: this.isWhisper
                             });
                         }
                     }
+
                     return Promise.resolve({
                         result: replaceMessageData(CommandMessages.MISSING_BOSS, message.toLowerCase()), 
                         whisper: true
@@ -113,6 +129,17 @@ export class BossVote implements ICustomCommand {
                 }
                 
         }
+    }
+
+    private vote(channel: string, userState: Object, monsterData: IMonster, monsterDisplayName: string, votes: number): Promise<ICommandResponse> {
+        this.ongoingVotes.get(channel).voters.push(userState['username']);
+        for(var i = 0; i < votes; i++) {
+            this.ongoingVotes.get(channel).bossVotes.push(monsterData);
+        }
+        return Promise.resolve({
+            result: replaceMessageData(CommandMessages.BOSS_VOTE_CAST, monsterDisplayName),
+            whisper: this.isWhisper
+        });
     }
 
 }

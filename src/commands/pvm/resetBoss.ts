@@ -3,7 +3,7 @@ import { isUserAllowed } from "../../util/permissions";
 import { replaceMessageData } from "../../util/utils";
 import { CommandMessages, CommandConstants } from "../../util/staticData/commands";
 import { isNullOrUndefined, isNull } from "util";
-import { ensureChannelDataLists } from "../util";
+import { ensureChannelDataLists, getChannelOwner, listBosses } from "../util";
 import { FirebaseConstants } from "../../util/staticData/firebase";
 import { RemoteReference, RemoteReferenceHandler } from "../../util/firebaseHandler";
 
@@ -21,18 +21,18 @@ export class ResetBoss implements ICustomCommand {
                 whisper: true
             });
         });
+        const channelOwner = getChannelOwner(channel);
+        const channelData = this.dataStore.channelData[channelOwner];
         
         if (message.indexOf(' ') === -1) {
             return Promise.resolve({
-                result: replaceMessageData(CommandMessages.COMMAND_NO_ARGS, CommandConstants.RESET_BOSS_DISPLAY, CommandConstants.BOSS_EXPECTED_ARG),
-                 whisper: true
+                result: listBosses(channelData.normalList),
+                whisper: true
             });
         }
         message = message.substring(message.indexOf(' ') + 1);
         
         const username = userState['username'];
-        const channelOwner = channel.replace('#', '');
-        const channelData = this.dataStore.channelData[channelOwner];
         ensureChannelDataLists(channelData);
 
         for(var i = 0; i < channelData.normalList.length; i++) {
