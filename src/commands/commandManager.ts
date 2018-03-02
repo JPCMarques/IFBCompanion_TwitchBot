@@ -6,10 +6,13 @@ import { replaceMessageData } from "../util/utils";
 import { CommandMessages } from "../util/staticData/commands";
 import { Join } from "./remoteData/join";
 import { Leave } from "./remoteData/leave";
-import { BanBoss } from "./pvm/banBoss";
-import { PreferBoss } from "./pvm/preferBoss";
-import { ResetBoss } from "./pvm/resetBoss";
-import { ResetAllBosses } from "./pvm/resetAllBosses";
+import { BanBoss } from "./pvm/bossManagement/banBoss";
+import { PreferBoss } from "./pvm/bossManagement/preferBoss";
+import { ResetBoss } from "./pvm/bossManagement/resetBoss";
+import { ResetAllBosses } from "./pvm/bossManagement/resetAllBosses";
+import { preCleanMessage } from "./util";
+import { Import } from "./remoteData/import";
+import { Export } from "./remoteData/export";
 
 export class CommandManager {
     private commandDirectory: ICommandDirectory = {}
@@ -21,7 +24,10 @@ export class CommandManager {
 
         this.registerCommands(new BossVote(dataStore));
 
-        this.registerWhisperCommands(new Join(dataStore), new Leave(dataStore));
+        this.registerWhisperCommands(new Join(dataStore),
+                                     new Leave(dataStore),
+                                     new Import(dataStore),
+                                     new Export(dataStore));
 
         this.registerSharedCommands(new BanBoss(dataStore),
                                     new PreferBoss(dataStore),
@@ -78,8 +84,8 @@ export class CommandManager {
     }
 
     async parseMessage (channel: string, userState: Object, message: string) : Promise<ICommandResponse> {
-        message = message.toLowerCase();
-        const messageTokens = message.trim().split(' ');
+        message = preCleanMessage(message);
+        const messageTokens = message.split(' ');
         const commandID = messageTokens[0];
 
         const command = this.commandDirectory[commandID];
@@ -96,8 +102,8 @@ export class CommandManager {
     }
 
     async parseWhisper (channel:string, userState: Object, message: string): Promise<ICommandResponse> {
-        message = message.toLowerCase();
-        const messageTokens = message.trim().split(' ');
+        message = preCleanMessage(message);
+        const messageTokens = message.split(' ');
         const commandID = messageTokens[0];
 
         const command = this.whisperCommandDirectory[commandID];

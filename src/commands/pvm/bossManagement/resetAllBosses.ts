@@ -1,8 +1,8 @@
-import { ICustomCommand, IDataStore, ICommandResponse, MonsterList } from "../../util/dataStore";
-import { isUserAllowed } from "../../util/permissions";
-import { RemoteReference, RemoteReferenceHandler } from "../../util/firebaseHandler";
-import { FirebaseConstants } from "../../util/staticData/firebase";
-import { CommandConstants } from "../../util/staticData/commands";
+import { ICustomCommand, IDataStore, ICommandResponse, MONSTER_LIST } from "../../../util/dataStore";
+import { isUserAllowed } from "../../../util/permissions";
+import { RemoteReference, RemoteReferenceHandler } from "../../../util/firebaseHandler";
+import { FirebaseConstants } from "../../../util/staticData/firebase";
+import { CommandConstants } from "../../../util/staticData/commands";
 
 export class ResetAllBosses implements ICustomCommand {
     isWhisper = true;
@@ -21,9 +21,9 @@ export class ResetAllBosses implements ICustomCommand {
         const channelOwner = channel.replace('#', '');
         const channelData = this.dataStore.channelData[channelOwner];
 
-        channelData.normalList = MonsterList;
+        channelData.normalList = MONSTER_LIST;
         channelData.preferList = [];
-        channelData.banList = [];
+        channelData.preferList = [];
 
         const remoteRef = new RemoteReference(FirebaseConstants.CHANNEL_DATA_PATH + '/' + channelOwner);
         RemoteReferenceHandler.SetData(remoteRef, channelData);

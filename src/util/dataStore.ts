@@ -69,7 +69,7 @@ export const WhisperCommandList: CommandType[] = [
     }
 ]
 
-export const MonsterList : IMonster[] = [
+export const MONSTER_LIST : IMonster[] = [
     {
         aliases: ['kree\'arra', 'kree', 'arma', 'idiot bird'],
         displayName: 'Kree\'arra'

@@ -3,7 +3,7 @@ import * as prompt from 'prompt';
 import 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-import { IDataStore, MonsterList, IChannelDataStore } from './dataStore';
+import { IDataStore, MONSTER_LIST, IChannelDataStore } from './dataStore';
 import { replaceMessageData } from './utils';
 import { FirebaseMessages, FirebaseConstants } from './staticData/firebase';
 import { isNullOrUndefined, isNull } from 'util';

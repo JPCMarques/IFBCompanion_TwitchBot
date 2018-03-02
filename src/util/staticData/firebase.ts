@@ -1,4 +1,5 @@
 import { IGenericMessage } from "../utils";
+import { MONSTER_LIST } from "../dataStore";
 
 export abstract class FirebaseMessages {
     static readonly GET_SUCCESS: IGenericMessage = {
@@ -16,3 +17,10 @@ export enum FirebaseConstants {
     CHANNEL_LIST_PATH = 'constants/pvm/channelList',
     CHANNEL_DATA_PATH = 'constants/pvm/channelData'
 }
+
+export const getDefaultChannelData = () => {return {
+    modsEnabled: false,
+    banList: [],
+    normalList: MONSTER_LIST,
+    preferList: []
+}}

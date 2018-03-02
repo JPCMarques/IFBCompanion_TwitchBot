@@ -13,7 +13,7 @@ export function isChannelOwner (channel:string, userState: Object): boolean {
 
 export function ensureChannelDataLists (channelData: IChannelData): void {
     if (isNullOrUndefined(channelData.normalList)) channelData.normalList = [];
-    if (isNullOrUndefined(channelData.banList)) channelData.banList = [];
+    if (isNullOrUndefined(channelData.preferList)) channelData.preferList = [];
     if (isNullOrUndefined(channelData.preferList)) channelData.preferList = [];
 }
 
@@ -30,4 +30,12 @@ export function listBosses(monsterList: IMonster[]): string {
         monsters += ', ' + monsterList[i].displayName;
     }
     return monsters;
+}
+
+export function preCleanMessage(message: string): string {
+    return message.toLowerCase().trim();
+}
+
+export function safeCopyMonster(monster: IMonster): IMonster {
+    return {...monster, aliases: [...monster.aliases]};
 }

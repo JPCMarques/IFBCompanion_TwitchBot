@@ -1,4 +1,4 @@
-import { IDataStore, ICustomCommand, IMonster, MonsterList, ICommandResponse } from "../../util/dataStore";
+import { IDataStore, ICustomCommand, IMonster, MONSTER_LIST, ICommandResponse } from "../../util/dataStore";
 import { isChannelMod, isChannelOwner } from "../util";
 import { isUserAllowed } from "../../util/permissions";
 import { CommandConstants, CommandMessages } from "../../util/staticData/commands";
@@ -106,9 +106,9 @@ export class BossVote implements ICustomCommand {
                         }
                     }
 
-                    for (var i = 0; i < channelData.banList.length; i++){
-                        if (channelData.banList[i].aliases.indexOf(bossToken) !== -1){
-                            const monster = channelData.banList[i];
+                    for (var i = 0; i < channelData.preferList.length; i++){
+                        if (channelData.preferList[i].aliases.indexOf(bossToken) !== -1){
+                            const monster = channelData.preferList[i];
                             return Promise.resolve({
                                 result: replaceMessageData(CommandMessages.BOSS_VOTE_BANNED_BOSS, monster.displayName),
                                 whisper: this.isWhisper

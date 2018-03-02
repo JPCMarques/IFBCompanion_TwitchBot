@@ -7,7 +7,7 @@ export class Leave implements ICustomCommand {
     aliases = ['!leaveme', '!leave'];
 
     constructor(private dataStore: IDataStore) {}
-
+ 
     async execute(channel: string, userState: Object, message: string): Promise<ICommandResponse> {
         const username = userState['username'];
         let index = this.dataStore.channelList.indexOf(channel);
