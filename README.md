@@ -7,6 +7,11 @@ All commands are case-insensitive and some have easter eggs - not included in th
 
 The bot is, for the most part, silent - command feedback is generally whispered to the caller - so you don't have to worry about spam.
 
+Quick start:
+- [Join](#join)
+- [Leave](#leave)
+- [Mod control](#mod-control)
+
 ## Chat commands 
 
 ### Boss Vote
@@ -117,4 +122,4 @@ Resets all bosses to the normal list.
 - **Arguments**: none
 
 <hr>
-<a name="ModInfo">**M**</a>: Only channel owner and mods can do this
+<a name="ModInfo"><strong>M</strong></a>: Only channel owner and mods can do this
