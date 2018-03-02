@@ -7,6 +7,8 @@ All commands are case-insensitive and some have easter eggs - not included in th
 
 The bot is, for the most part, silent - command feedback is generally whispered to the caller - so you don't have to worry about spam.
 
+**The bot name on twitch is IFBCompanion**, so send whispers there.
+
 Quick start:
 - [Join](#join)
 - [Leave](#leave)
