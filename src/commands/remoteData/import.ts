@@ -68,13 +68,14 @@ export class Import implements ICustomCommand {
                     const monsterItem = normalList[mlIndex];
                     if (monsterItem.aliases.indexOf(preferredItem) !== -1) {
                         normalList.splice(mlIndex, 1);
-                        channelData.banList.push(monsterItem);
+                        channelData.preferList.push(monsterItem);
                     }
                 }
             }
         }
 
-        console.log(JSON.stringify(channelData));
+        this.dataStore.channelData[userState['username']] = channelData;
+
         return Promise.resolve({
             result: CommandConstants.IMPORT_SUCCESS,
             whisper: this.isWhisper

@@ -14,7 +14,7 @@ export function isChannelOwner (channel:string, userState: Object): boolean {
 export function ensureChannelDataLists (channelData: IChannelData): void {
     if (isNullOrUndefined(channelData.normalList)) channelData.normalList = [];
     if (isNullOrUndefined(channelData.preferList)) channelData.preferList = [];
-    if (isNullOrUndefined(channelData.preferList)) channelData.preferList = [];
+    if (isNullOrUndefined(channelData.banList)) channelData.banList = [];
 }
 
 export function getChannelOwner(channel: string): string {

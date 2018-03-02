@@ -18,7 +18,7 @@ All commands are case-insensitive.
 
 #### Boss Vote
 
-This command allows you to start/stop boss votes (no shit).
+This command allows you to start/stop boss votes (no shit). Only 1 vote per person. Votes on preferred bosses count as 2.
 
 **Aliases**: `!bv`, `!bossvote`, `!bvote`
 
@@ -28,8 +28,18 @@ This command allows you to start/stop boss votes (no shit).
   
   Starts a boss vote. <sup>[M](#ModInfo)</sup>
 
+- `stop`
+
+  Stops a boss vote and outputs result to chat. <sup>[M](#ModInfo)</sup>
+
+- `<boss name>`
+
+  Votes on a boss. Aliases/nicknames - like rax or spooder for Araxxor - work (with some easter eggs ;))
+
 ### Whisper commands
+
+
 
 ### Whisper & chat commands
 
-<a name="ModInfo">M</a>: Only channel owner and mods can do this
+<a name="ModInfo">**M**</a>: Only channel owner and mods can do this

@@ -30,10 +30,10 @@ export class Export implements ICustomCommand {
             exportData.b.push(channelData.banList[i].displayName);
         }
         for (var i = 0; i < channelData.preferList.length; i++) {
-            exportData.b.push(channelData.preferList[i].displayName);
+            exportData.p.push(channelData.preferList[i].displayName);
         }
         for (var i = 0; i < channelData.normalList.length; i++) {
-            exportData.b.push(channelData.normalList[i].displayName);
+            exportData.n.push(channelData.normalList[i].displayName);
         }
 
         return Promise.resolve({
