@@ -12,11 +12,9 @@ All commands are case-insensitive.
 - Joining: whisper the user **IFBCompanion** `!joinme`
 - Leaving: whisper the user **IFBCompanion** `!leaveme`
 
-## Other commands
+## Chat commands 
 
-### Chat commands 
-
-#### Boss Vote
+### Boss Vote
 
 This command allows you to start/stop boss votes (no shit). Only 1 vote per person. Votes on preferred bosses count as 2.
 
@@ -36,10 +34,16 @@ This command allows you to start/stop boss votes (no shit). Only 1 vote per pers
 
   Votes on a boss. Aliases/nicknames - like rax or spooder for Araxxor - work (with some easter eggs ;))
 
-### Whisper commands
+## Whisper commands
 
 
 
-### Whisper & chat commands
+## Whisper & chat commands
+
+### Ban boss <sup>[M](#ModInfo)</sup>
+
+Adds a boss to the ban list.
+
+**Arguments**: boss (nick)name.
 
 <a name="ModInfo">**M**</a>: Only channel owner and mods can do this
