@@ -1,10 +1,11 @@
-import { ICustomCommand, IDataStore, ICommandResponse, IMonster, MONSTER_LIST } from "../../util/dataStore";
+import { ICustomCommand, IDataStore, ICommandResponse, IMonster, MONSTER_LIST, IChannelData } from "../../util/dataStore";
 import { safeCopyMonster } from "../util";
 import { isUserAllowed } from "../../util/permissions";
 import { replaceMessageData } from "../../util/utils";
 import { CommandMessages, CommandConstants } from "../../util/staticData/commands";
-import { getDefaultChannelData } from "../../util/staticData/firebase";
+import { getDefaultChannelData, FirebaseConstants } from "../../util/staticData/firebase";
 import { isNullOrUndefined } from "util";
+import { RemoteReference, RemoteReferenceHandler } from "../../util/firebaseHandler";
 
 /**
  * Used for import command. An example of the import command is:
@@ -75,6 +76,8 @@ export class Import implements ICustomCommand {
         }
 
         this.dataStore.channelData[userState['username']] = channelData;
+        const remoteRef = new RemoteReference<IChannelData>(FirebaseConstants.CHANNEL_DATA_PATH + '/' + userState['username']);
+        RemoteReferenceHandler.SetData(remoteRef, this.dataStore.channelData[userState['username']]);
 
         return Promise.resolve({
             result: CommandConstants.IMPORT_SUCCESS,
