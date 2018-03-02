@@ -3,7 +3,11 @@ Twitch bot for https://jpcmarques.github.io/IFBCompanion/
 
 The bot allows you to run a series of commands allowing you to go for IFB and interact with your stream with a wide array of commands - and you don't need to sign up for the bot to work, just a pm will suffice!
 
-## Adding/removing bot from your stream
+All commands are case-insensitive.
+
+## Management commands (owner/mod level)
+
+### Adding/removing bot from your stream
 
 - Joining: whisper the user **IFBCompanion** `!joinme`
 - Leaving: whisper the user **IFBCompanion** `!leaveme`
@@ -12,18 +16,20 @@ The bot allows you to run a series of commands allowing you to go for IFB and in
 
 ### Chat commands 
 
-- `!bossVote start`
+#### Boss Vote
 
-    Starts a boss vote (only stream owner will be able to do this, mod support coming soon).
+This command allows you to start/stop boss votes (no shit).
 
-- `!bossVote stop`
+**Aliases**: `!bv`, `!bossvote`, `!bvote`
 
-    Wraps up a boss vote (only stream owner will be able to do this, mod support coming soon).
+**Arguments**:
 
-- `!bossVote <bossName>`
+- `start`
+  
+  Starts a boss vote. <sup>[M](#ModInfo)</sup>
 
-    Votes for a boss.
+### Whisper commands
 
-- `!ifbcompanion`
+### Whisper & chat commands
 
-    Links to this page.
+<a name="ModInfo">M</a>: Only channel owner and mods can do this
